@@ -61,6 +61,10 @@ export default function AdmissionsSection() {
             <h2>Begin Your<br />Admission Today</h2>
             <p>Join thousands of students who chose GGES for a better future.</p>
             {benefits.map((benefit) => <span className="benefit" key={benefit}><Check />{benefit}</span>)}
+            <div className="admission-media">
+              <img src="/campus-life.svg" alt="Campus life illustration" />
+              <img src="/classroom-lab.svg" alt="Classroom learning illustration" />
+            </div>
           </div>
         </div>
         <AdmissionForm />

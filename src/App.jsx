@@ -6,6 +6,8 @@ import HeroSection from './sections/HeroSection'
 import JourneySection from './sections/JourneySection'
 import PlacementsSection from './sections/PlacementsSection'
 import ProgramsSection from './sections/ProgramsSection'
+import AdmissionsChatbot from './components/AdmissionsChatbot'
+import WhatsAppWidget from './components/WhatsAppWidget'
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
         <AdmissionsSection />
       </main>
       <Footer />
+      <AdmissionsChatbot />
+      <WhatsAppWidget />
     </>
   )
 }

@@ -1,18 +1,31 @@
-import { motion } from 'framer-motion'
-import { ArrowRight, BookOpen, Code2, Download, Globe2, GraduationCap, Sparkles } from 'lucide-react'
-import Stat from '../components/ui/Stat'
-import { heroChips } from '../data/siteData'
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  Download,
+  Globe2,
+} from "lucide-react";
+import Stat from "../components/ui/Stat";
+import { heroChips } from "../data/siteData";
 
 const heroStats = [
-  ['10,000+', 'Students'],
-  ['500+', 'Recruiters'],
-  ['95%', 'Placement Support'],
-  ['20+', 'Years of Excellence'],
-]
+  ["10,000+", "Students"],
+  ["500+", "Recruiters"],
+  ["95%", "Placement Support"],
+  ["20+", "Years of Excellence"],
+];
 
 export default function HeroSection() {
   return (
-    <section id="home" className="hero-section dark-section">
+    <section 
+      id="home" 
+      className="hero-section dark-section"
+      style={{ 
+        minHeight: "100vh", 
+        height: "auto", 
+        overflow: "visible",
+        paddingBottom: "3rem" 
+      }}
+    >
       <div className="stars" />
       {heroChips.map(({ label, className, duration }) => (
         <motion.span
@@ -25,22 +38,64 @@ export default function HeroSection() {
         </motion.span>
       ))}
 
-      <div className="hero-inner">
+      <div 
+        className="hero-inner"
+        style={{ overflow: "visible" }} 
+      >
         <motion.div
           className="hero-copy"
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <span className="eyebrow pill"><Sparkles /> Future-Ready Education &middot; 2026</span>
-          <h1>Shape Your Future<br />with <span>Industry-Focused</span> Education</h1>
-          <p>Build a successful career in Management, Technology, and Pharmacy through future-ready programs designed for tomorrow&apos;s opportunities.</p>
+          <h1>
+            Shape Your Future
+            <br />
+            with <span>Industry-Focused</span> Education
+          </h1>
+          <p>
+            Build a successful career in Management, Technology, and Pharmacy
+            through future-ready programs designed for tomorrow&apos;s
+            opportunities.
+          </p>
+          
+          <motion.div
+            className="hero-mobile-showcase"
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            style={{ position: "relative" }} 
+          >
+            {/* FIX: Kept the orbits but removed the Globe for a cleaner mobile look */}
+            <div className="orbit orbit-one" />
+            <div className="orbit orbit-two" />
+
+            <img
+              className="mobile-hero-image"
+              src="/hero.png"
+              alt="Layered education technology illustration"
+              style={{ position: "relative", zIndex: 1 }} 
+            />
+            
+            <div className="mobile-program-strip" style={{ position: "relative", zIndex: 2 }}>
+              {heroChips.slice(0, 4).map(({ label }) => (
+                <span key={label}>{label}</span>
+              ))}
+            </div>
+          </motion.div>
+
           <div className="hero-actions">
-            <a className="btn primary" href="#admissions">Apply Now <ArrowRight /></a>
-            <a className="btn outline" href="#programs"><Download /> Download Brochure</a>
+            <a className="btn primary" href="#admissions">
+              Apply Now <ArrowRight />
+            </a>
+            <a className="btn outline" href="#programs">
+              <Download /> Download Brochure
+            </a>
           </div>
           <div className="hero-stats">
-            {heroStats.map(([value, label]) => <Stat key={label} value={value} label={label} />)}
+            {heroStats.map(([value, label]) => (
+              <Stat key={label} value={value} label={label} />
+            ))}
           </div>
         </motion.div>
 
@@ -52,12 +107,16 @@ export default function HeroSection() {
         >
           <div className="orbit orbit-one" />
           <div className="orbit orbit-two" />
-          <div className="globe"><Globe2 /></div>
-          <motion.span className="float-icon i1" animate={{ y: [0, -16, 0], rotate: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 4 }}><GraduationCap /></motion.span>
-          <motion.span className="float-icon i2" animate={{ y: [0, 14, 0] }} transition={{ repeat: Infinity, duration: 4.5 }}><BookOpen /></motion.span>
-          <motion.span className="float-icon i3" animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 3.6 }}><Code2 /></motion.span>
+          <img
+            className="hero-main-image"
+            src="/hero.png"
+            alt="Layered education technology illustration"
+          />
+          <div className="globe">
+            <Globe2 />
+          </div>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
