@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronRight, MessageCircle, X } from 'lucide-react';
 
-// Replace this with your actual institution's WhatsApp number (include country code, omit '+' or spaces)
-const WHATSAPP_NUMBER = "919876543210"; 
+// Institution WhatsApp number in international format, without '+' or spaces.
+const WHATSAPP_NUMBER = "918299199937";
 
 const supportOptions = [
   {

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -15,6 +16,41 @@ const heroStats = [
 ];
 
 export default function HeroSection() {
+  const heroHighlight = "Industry-Focused";
+  const [typedHighlight, setTypedHighlight] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const runTypewriter = async () => {
+      while (!cancelled) {
+        for (let index = 1; index <= heroHighlight.length; index += 1) {
+          setTypedHighlight(heroHighlight.slice(0, index));
+          await sleep(85);
+          if (cancelled) return;
+        }
+
+        await sleep(1200);
+        if (cancelled) return;
+
+        for (let index = heroHighlight.length - 1; index >= 0; index -= 1) {
+          setTypedHighlight(heroHighlight.slice(0, index));
+          await sleep(45);
+          if (cancelled) return;
+        }
+
+        await sleep(250);
+      }
+    };
+
+    runTypewriter();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section 
       id="home" 
@@ -51,7 +87,16 @@ export default function HeroSection() {
           <h1>
             Shape Your Future
             <br />
-            with <span>Industry-Focused</span> Education
+            with <span className="typewriter-slot" aria-label={heroHighlight}>
+              <span className="typewriter-reserve" aria-hidden="true">
+                {heroHighlight}
+              </span>
+              <span className="typewriter-word">
+                {typedHighlight}
+                <span className="typewriter-cursor" aria-hidden="true" />
+              </span>
+            </span>{" "}
+            Education
           </h1>
           <p>
             Build a successful career in Management, Technology, and Pharmacy
@@ -66,7 +111,6 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.15 }}
             style={{ position: "relative" }} 
           >
-            {/* FIX: Kept the orbits but removed the Globe for a cleaner mobile look */}
             <div className="orbit orbit-one" />
             <div className="orbit orbit-two" />
 
@@ -76,6 +120,14 @@ export default function HeroSection() {
               alt="Layered education technology illustration"
               style={{ position: "relative", zIndex: 1 }} 
             />
+            <div className="admission-open-layer mobile">
+              <span className="admission-open-eyebrow">Admission Open 2026</span>
+              <strong>Apply now for the 2026 intake</strong>
+              <small>
+                Seats open across management, technology, and pharmacy
+                programs.
+              </small>
+            </div>
             
             <div className="mobile-program-strip" style={{ position: "relative", zIndex: 2 }}>
               {heroChips.slice(0, 4).map(({ label }) => (
@@ -88,7 +140,7 @@ export default function HeroSection() {
             <a className="btn primary" href="#admissions">
               Apply Now <ArrowRight />
             </a>
-            <a className="btn outline" href="#programs">
+            <a className="btn outline" href="#admissions">
               <Download /> Download Brochure
             </a>
           </div>
@@ -112,6 +164,11 @@ export default function HeroSection() {
             src="/hero.png"
             alt="Layered education technology illustration"
           />
+          <div className="admission-open-layer">
+            <span className="admission-open-eyebrow">Admission Open 2026</span>
+            <strong>Apply now for the 2026 intake</strong>
+            <small>Seats open across all flagship UG and PG programs.</small>
+          </div>
           <div className="globe">
             <Globe2 />
           </div>

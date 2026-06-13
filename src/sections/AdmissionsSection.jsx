@@ -29,7 +29,7 @@ function AdmissionForm() {
       ) : (
         <>
           <label className="full">Full Name<input required name="fullName" autoComplete="name" placeholder="Enter your name" /></label>
-          <label>Phone<input required name="phone" type="tel" autoComplete="tel" placeholder="+91 00000 00000" /></label>
+          <label>Phone<input required name="phone" type="tel" autoComplete="tel" placeholder="+91 82991 99937" /></label>
           <label>Email<input required name="email" type="email" autoComplete="email" placeholder="you@email.com" /></label>
           <label>
             Program
@@ -76,7 +76,7 @@ export default function AdmissionsSection() {
         <p>Join thousands of students building successful careers through quality education and industry-ready training.</p>
         <div>
           <a className="btn primary" href="#admissions">Apply Now</a>
-          <a className="btn brand-outline" href="tel:+910000000000">Talk to Counselor</a>
+          <a className="btn brand-outline" href="tel:+918299199937">Talk to Counselor</a>
         </div>
         <div className="final-stats">
           {finalStats.map(([value, label]) => <Stat key={label} value={value} label={label} />)}
