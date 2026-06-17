@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, BookOpen, CheckCircle2, ShieldCheck, Sparkles, X } from 'lucide-react'
 import AdmissionFormCard from './AdmissionFormCard'
@@ -8,6 +8,7 @@ const AdmissionsModalContext = createContext(null)
 export function AdmissionsModalProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false)
   const [initialProgram, setInitialProgram] = useState('')
+  const hasOpenedOnScroll = useRef(false)
 
   const openAdmissionsModal = (program = '') => {
     setInitialProgram(program)
@@ -29,6 +30,30 @@ export function AdmissionsModalProvider({ children }) {
       window.clearTimeout(autoOpenTimer)
     }
   }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const openAfterScroll = () => {
+      const scrollTriggerPoint = Math.min(window.innerHeight * 0.8, 650)
+
+      if (hasOpenedOnScroll.current || isOpen || window.scrollY < scrollTriggerPoint) {
+        return
+      }
+
+      hasOpenedOnScroll.current = true
+      setInitialProgram('')
+      setIsOpen(true)
+      window.removeEventListener('scroll', openAfterScroll)
+    }
+
+    window.addEventListener('scroll', openAfterScroll, { passive: true })
+    openAfterScroll()
+
+    return () => {
+      window.removeEventListener('scroll', openAfterScroll)
+    }
+  }, [isOpen])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
