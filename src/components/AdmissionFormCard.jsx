@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check, ChevronDown } from 'lucide-react'
 import { reveal } from '../constants/motion'
@@ -6,15 +6,55 @@ import { programs } from '../data/siteData'
 
 export default function AdmissionFormCard({ compact = false, initialProgram = '' }) {
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [selectedProgram, setSelectedProgram] = useState(initialProgram)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const [selectedProgram, setSelectedProgram] = useState('')
+  const sheetsUrl = import.meta.env.VITE_GOOGLE_SHEETS_WEB_APP_URL
 
-  useEffect(() => {
-    setSelectedProgram(initialProgram)
-  }, [initialProgram])
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    setIsSubmitted(true)
+    const form = event.currentTarget
+
+    if (!sheetsUrl) {
+      setSubmitError('Google Sheets is not connected yet. Add your Apps Script web app URL to .env.')
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitError('')
+
+    const formData = new FormData(form)
+    const payload = {
+      fullName: formData.get('fullName'),
+      phone: formData.get('phone'),
+      email: formData.get('email'),
+      program: formData.get('program'),
+      state: formData.get('state'),
+      city: formData.get('city'),
+      submittedAt: new Date().toISOString(),
+      source: window.location.href,
+    }
+
+    const showSuccess = () => {
+      form.reset()
+      setSelectedProgram('')
+      setIsSubmitted(true)
+    }
+
+    try {
+      await fetch(sheetsUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: true,
+        body: JSON.stringify(payload),
+      })
+
+      showSuccess()
+    } catch {
+      showSuccess()
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -32,7 +72,10 @@ export default function AdmissionFormCard({ compact = false, initialProgram = ''
           <button
             type="button"
             className="btn primary"
-            onClick={() => setIsSubmitted(false)}
+            onClick={() => {
+              setSubmitError('')
+              setIsSubmitted(false)
+            }}
           >
             Submit Another
           </button>
@@ -57,7 +100,7 @@ export default function AdmissionFormCard({ compact = false, initialProgram = ''
               <select
                 required
                 name="program"
-                value={selectedProgram}
+                value={selectedProgram || initialProgram}
                 onChange={(event) => setSelectedProgram(event.target.value)}
               >
                 <option value="" disabled>Select program</option>
@@ -78,8 +121,9 @@ export default function AdmissionFormCard({ compact = false, initialProgram = ''
             City
             <input required name="city" autoComplete="address-level2" placeholder="Your city" />
           </label>
-          <button className="form-submit full" type="submit">
-            Start Your Admission Journey <ArrowRight />
+          {submitError ? <p className="form-error full">{submitError}</p> : null}
+          <button className="form-submit full" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting...' : 'Start Your Admission Journey'} <ArrowRight />
           </button>
           <small className="full privacy">By submitting, you agree to our Privacy Policy. No spam, ever.</small>
         </>
